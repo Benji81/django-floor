@@ -167,7 +167,7 @@ class ExpandIterable(SettingReference):
 
 
 def _resolve_name(name, package, level):
-    """Return the absolute name of the module to be imported."""
+    """Return the absolute name of a module that need to be imported."""
     if not hasattr(package, 'rindex'):
         raise ValueError("'package' not set to a string")
     dot = len(package)
@@ -215,7 +215,43 @@ def guess_version(defined_settings):
     try:
         return import_string('%s.__version__' % defined_settings['PROJECT_NAME'])
     except ImportError:
-        return 'no.version.defined'
+        return '0.0.0'
+
+
+def walk(module_name, dirname, topdown=True):
+    """
+    Copy of :func:`os.walk`, please refer to its doc. The only difference is that we walk in a package_resource
+    instead of a plain directory.
+    :type module_name: basestring
+    :param module_name: module to search in
+    :type dirname: basestring
+    :param dirname: base directory
+    :type topdown: bool
+    :param topdown: if True, perform a topdown search.
+    """
+    def rec_walk(root):
+        """
+        Recursively list subdirectories and filenames from the root.
+        :param root: the root path
+        :type root: basestring
+        """
+        dirnames = []
+        filenames = []
+        for name in pkg_resources.resource_listdir(module_name, root):
+            fullname = root + '/' + name
+            isdir = pkg_resources.resource_isdir(module_name, fullname)
+            if isdir:
+                dirnames.append(name)
+                if not topdown:
+                    rec_walk(fullname)
+            else:
+                filenames.append(name)
+        yield root, dirnames, filenames
+        if topdown:
+            for name in dirnames:
+                for values in rec_walk(root + '/' + name):
+                    yield values
+    return rec_walk(dirname)
 
 
 class SettingMerger(object):
@@ -460,37 +496,10 @@ class SettingMerger(object):
                         del self.settings[key]
 
 
-def walk(module_name, dirname, topdown=True):
-    """
-    Copy of :func:`os.walk`, please refer to its doc. The only difference is that we walk in a package_resource
-    instead of a plain directory.
-    :type module_name: basestring
-    :param module_name: module to search in
-    :type dirname: basestring
-    :param dirname: base directory
-    :type topdown: bool
-    :param topdown: if True, perform a topdown search.
-    """
-    def rec_walk(root):
+class SettingMerger2(object):
+    def __init__(self, config_files, ini_mapping=None):
+        """Fetch settings from a list of files
+
+        :param config_files: list of config files
+        :param ini_mapping:
         """
-        Recursively list subdirectories and filenames from the root.
-        :param root: the root path
-        :type root: basestring
-        """
-        dirnames = []
-        filenames = []
-        for name in pkg_resources.resource_listdir(module_name, root):
-            fullname = root + '/' + name
-            isdir = pkg_resources.resource_isdir(module_name, fullname)
-            if isdir:
-                dirnames.append(name)
-                if not topdown:
-                    rec_walk(fullname)
-            else:
-                filenames.append(name)
-        yield root, dirnames, filenames
-        if topdown:
-            for name in dirnames:
-                for values in rec_walk(root + '/' + name):
-                    yield values
-    return rec_walk(dirname)

@@ -66,9 +66,9 @@ in the Django shell, you can check that settings are gracefully merged together:
 *How to use it?* Since your settings are expected to be in  `myproject.defaults` and in `[prefix]/etc/myproject/settings.py`, DjangoFloor must determine `myproject`.
 There are three ways to let it know `myproject`:
 
-  -  use provided commands `djangofloor-celery`, `djangofloor-manage`, `djangofloor-gunicorn` or `djangofloor-uwsgi` with the option `--dfproject myproject`
+  -  use provided commands `djangofloor-celery`, `djangofloor-manage` or `djangofloor-gunicorn` with the option `--dfproject myproject`
   -  `export DJANGOFLOOR_PROJECT_NAME=myproject` before using `djangofloor-celery`, `djangofloor-manage`, `djangofloor-gunicorn` or `djangofloor-uwsgi`
-  -  renaming `djangofloor-celery`, `djangofloor-manage`, `djangofloor-gunicorn` or `djangofloor-uwsgi` to `myproject-[celery|manage|gunicorn|uwsgi`
+  -  renaming `djangofloor-celery`, `djangofloor-manage`, `djangofloor-gunicorn` or to `myproject-[celery|manage|gunicorn`
 
 You can change `myproject.defaults` to another value with the environment variable `DJANGOFLOOR_PROJECT_SETTINGS`
 You can specify another local setting files with the option `--dfconf [path/to/settings.py]`
@@ -162,7 +162,6 @@ These dictionnaries will act as regular signals. Of course, you can only propaga
 Batteries included
 ------------------
 
-  * uwsgi
   * bootstrap3 (django-bootstrap3)
   * font-awesome
   * SCSS, CSS and JS minimizing (django-pipeline with pyscss, jsmin and rcssmin)

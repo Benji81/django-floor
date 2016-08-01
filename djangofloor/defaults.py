@@ -16,13 +16,6 @@ from djangofloor.utils import DirectoryPath, FilePath, SettingReference, ExpandI
 __author__ = 'Matthieu Gallet'
 
 try:
-    import ws4redis
-
-    FLOOR_USE_WS4REDIS = True
-except ImportError:
-    ws4redis = None
-    FLOOR_USE_WS4REDIS = False
-try:
     # noinspection PyPackageRequirements
     import scss
     USE_SCSS = True
@@ -303,9 +296,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'djangofloor.context_processors.context_base',
     ExpandIterable('FLOOR_TEMPLATE_CONTEXT_PROCESSORS'),
 ]
-if FLOOR_USE_WS4REDIS:
-    # noinspection PyUnresolvedReferences
-    TEMPLATE_CONTEXT_PROCESSORS += ['ws4redis.context_processors.default', ]
 
 TEMPLATE_DIRS = []
 TEMPLATES = [
@@ -342,10 +332,6 @@ INSTALLED_APPS = [
     ExpandIterable('OTHER_ALLAUTH'),
     ExpandIterable('FLOOR_INSTALLED_APPS'),
 ]
-
-if FLOOR_USE_WS4REDIS:
-    # noinspection PyUnresolvedReferences
-    INSTALLED_APPS += ['ws4redis', ]
 
 
 OTHER_ALLAUTH = []
@@ -406,23 +392,8 @@ CACHES_HELP = 'A dictionary containing the settings for all caches to be used wi
 ########################################################################################################################
 # django-redis-websocket
 ########################################################################################################################
-WS4REDIS_DB = 15
-WS4REDIS_CONNECTION = {'host': '{REDIS_HOST}', 'port': '{REDIS_PORT}', 'db': SettingReference('WS4REDIS_DB'), }
-WS4REDIS_CONNECTION_HELP = 'If the Redis datastore uses connection settings other than the defaults.'
-WS4REDIS_EXPIRE = 0
-WS4REDIS_EMULATION_INTERVAL = 0
-# number of milliseconds between HTTP requests to emulate websockets
-# should not be less than 1000
-# leave it to 0 to desactivate this behavior
-WS4REDIS_PREFIX = 'ws'
-WS4REDIS_HEARTBEAT = '--HEARTBEAT--'
 # Python dotted path to the WSGI application used by Django's runserver.
-# WSGI_APPLICATION = 'djangofloor.wsgi_http.application'
 WSGI_APPLICATION = 'djangofloor.wsgi_http.application'
-if FLOOR_USE_WS4REDIS:
-    WSGI_APPLICATION = 'ws4redis.django_runserver.application'
-WS4REDIS_SUBSCRIBER = 'djangofloor.df_ws4redis.Subscriber'
-FLOOR_WS_FACILITY = 'djangofloor'
 FLOOR_SIGNAL_ENCODER = 'django.core.serializers.json.DjangoJSONEncoder'
 FLOOR_SIGNAL_DECODER = 'json.JSONDecoder'
 ########################################################################################################################
@@ -498,16 +469,5 @@ LOGGING = {
 LOGGING_HELP = 'A data structure containing configuration information.' \
                ' The contents of this data structure will be passed as the argument to the configuration method' \
                ' described in LOGGING_CONFIG.'
-
-########################################################################################################################
-# Raven
-########################################################################################################################
-SENTRY_DSN_URL = ''
-SENTRY_DSN_URL_HELP = 'Sentry URL to send data to. https://docs.getsentry.com/'
-
-RAVEN_CONFIG = {
-    'dsn': '{SENTRY_DSN_URL}',
-    'release': '{FLOOR_PROJECT_VERSION}',
-}
 
 FLOOR_PROJECT_VERSION = CallableSetting(guess_version)

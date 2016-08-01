@@ -57,7 +57,6 @@ from django.db.models import Q
 from django.http import QueryDict
 from django.utils.six import text_type
 
-
 try:
     from inspect import signature
 except ImportError:
@@ -66,7 +65,6 @@ except ImportError:
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djangofloor.exceptions import InvalidRequest
-
 
 __author__ = 'Matthieu Gallet'
 REGISTERED_SIGNALS = {}
@@ -94,6 +92,7 @@ class RE(object):
     :param flags: regexp flags passed to `re.compile`
     :type flags: `int`
     """
+
     def __init__(self, value, caster=None, flags=0):
         self.caster = caster
         self.regexp = re.compile(value, flags=flags)
@@ -121,6 +120,7 @@ class Choice(object):
 
     :param caster: callable to convert the provided deserialized JSON data before checking its validity.
     """
+
     def __init__(self, values, caster=None):
         self.values = set(values)
         self.caster = caster
@@ -174,6 +174,7 @@ class SerializedForm(object):
 
 
     """
+
     def __init__(self, form_cls):
         self.form_cls = form_cls
 
@@ -212,6 +213,7 @@ class SignalRequest(object):
     :param window_key: a string value specific to each opened browser window/tab
     :type window_key: :class:`str`
     """
+
     def __init__(self, username, session_key, user_pk=None, is_superuser=False, is_staff=False, is_active=False,
                  perms=None, window_key=None):
         self.username = username
@@ -342,7 +344,7 @@ class ViewWrapper(object):
         self.optional_arguments_names = []
 
         for key, param in sig.parameters.items():
-            if key in ('request', ):
+            if key in ('request',):
                 continue
             if param.kind == param.VAR_KEYWORD:  # corresponds to "fn(**kwargs)"
                 self.accept_kwargs = True
@@ -422,8 +424,11 @@ def connect(fn=None, path=None, delayed=False, allow_from_client=True, auth_requ
     :return: a wrapped function
     :rtype: :class:`callable`
     """
-    wrapped = lambda fn_: RedisCallWrapper(fn_, path=path, delayed=delayed, allow_from_client=allow_from_client,
-                                           auth_required=auth_required)
+
+    def wrapped(fn_):
+        return RedisCallWrapper(fn_, path=path, delayed=delayed, allow_from_client=allow_from_client,
+                                auth_required=auth_required)
+
     if fn is not None:
         wrapped = wrapped(fn)
     return wrapped

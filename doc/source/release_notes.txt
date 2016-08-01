@@ -1,0 +1,23 @@
+Release notes
+=============
+
+v 1.0.0
+-------
+
+  * better conf system
+  * install JS dependencies with `npm`
+  * new default templates
+  * use django-channels
+  * generate list of Bash commands:
+    * PolyArchiv templates
+    * Multisync templates
+    * SQL commands for creating databases
+    * Nagios checks
+    * systemd templates
+  * command for checking the configuration (missing files, conf files, Redis database, processes, DB connections)
+
+Backward incompatible changes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  * remove the `django-pipeline` dependency
+  * remove the `django-allauth` dependency

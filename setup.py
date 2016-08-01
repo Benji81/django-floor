@@ -22,12 +22,9 @@ entry_points = {'console_scripts': [],
                 'distutils.commands': ['bdist_deb_django = '
                                        'djangofloor.management.commands.bdist_deb_django:BdistDebDjango']}
 
-requirements = ['Django>=1.9.0', 'Django<1.10.0',
-                'django-allauth>=0.24.0',
+requirements = ['Django>=1.10.0',
                 'gunicorn>=0.14.5',
-                'django-bootstrap3>=6.2.0',
                 'django-debug-toolbar>=1.4',
-                'django-pipeline>=1.6.0', 'django-pipeline<1.7.0',
                 'celery>=3.1.13',
                 'django-redis>=3.8.3',
                 'django-redis-cache>=0.13.1', ]
@@ -36,8 +33,6 @@ extras_require = {}
 version_infos = (sys.version_info[0], sys.version_info[1])
 if version_infos < (3, 3):
     requirements.append('funcsigs')
-if version_infos < (3, 0):
-    extras_require['websocket'] = ['django-websocket-redis', 'gevent', 'uwsgi']
 extras_require['scss'] = ['pyScss', ]
 extras_require['deb'] = ['stdeb>=0.8.5', ]
 extras_require['doc'] = ['Sphinx>=1.3.1', ]
