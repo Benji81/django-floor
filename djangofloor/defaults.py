@@ -17,7 +17,6 @@ __author__ = 'Matthieu Gallet'
 
 try:
     import ws4redis
-
     FLOOR_USE_WS4REDIS = True
 except ImportError:
     ws4redis = None
