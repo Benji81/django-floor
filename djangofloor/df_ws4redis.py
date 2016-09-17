@@ -4,22 +4,19 @@
 You should not directly use these functions.
 """
 from __future__ import unicode_literals, absolute_import
+
 import json
 
 from django.conf import settings
 from django.utils.encoding import force_text
 from django.utils.six import binary_type
 from django.utils.translation import ugettext as _
-# noinspection PyUnresolvedReferences
-from ws4redis.subscriber import RedisSubscriber
-# noinspection PyUnresolvedReferences
-from ws4redis.publisher import RedisPublisher
-# noinspection PyUnresolvedReferences
-from ws4redis.redis_store import RedisMessage
-
 from djangofloor.decorators import SignalRequest
 from djangofloor.exceptions import ApiException
 from djangofloor.tasks import BROADCAST, df_call, SESSION, USER, get_signal_encoder, get_signal_decoder, WINDOW
+from ws4redis.publisher import RedisPublisher
+from ws4redis.redis_store import RedisMessage
+from ws4redis.subscriber import RedisSubscriber
 
 __author__ = 'Matthieu Gallet'
 
